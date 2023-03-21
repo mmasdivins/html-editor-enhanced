@@ -9,11 +9,12 @@ import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:html_editor_enhanced/utils/utils.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
+import 'package:html_editor_enhanced/src/html_editor_controller_windows.dart' as ecw;
 
 /// Toolbar widget class
 class ToolbarWidget extends StatefulWidget {
   /// The [HtmlEditorController] is mainly used to call the [execCommand] method
-  final HtmlEditorController controller;
+  final ecw.HtmlEditorController controller;
   final HtmlToolbarOptions htmlToolbarOptions;
   final Callbacks? callbacks;
 
@@ -417,7 +418,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     if (kIsWeb) {
                                       widget.controller.recalculateHeight();
                                     } else {
-                                      await widget.controller.editorController!
+                                      await widget.controller
                                           .evaluateJavascript(
                                               source:
                                                   "var height = \$('div.note-editable').outerHeight(true); window.flutter_inappwebview.callHandler('setHeight', height);");
@@ -445,7 +446,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                               if (kIsWeb) {
                                 widget.controller.recalculateHeight();
                               } else {
-                                await widget.controller.editorController!
+                                await widget.controller
                                     .evaluateJavascript(
                                         source:
                                             "var height = \$('div.note-editable').outerHeight(true); window.flutter_inappwebview.callHandler('setHeight', height);");
@@ -1361,7 +1362,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                       if (kIsWeb) {
                         widget.controller.changeListStyle(changed);
                       } else {
-                        await widget.controller.editorController!
+                        await widget.controller
                             .evaluateJavascript(source: '''
                                var \$focusNode = \$(window.getSelection().focusNode);
                                var \$parentList = \$focusNode.closest("div.note-editable ol, div.note-editable ul");
@@ -1578,7 +1579,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                       if (kIsWeb) {
                         widget.controller.changeLineHeight(changed.toString());
                       } else {
-                        await widget.controller.editorController!
+                        await widget.controller
                             .evaluateJavascript(
                                 source:
                                     "\$('#summernote-2').summernote('lineHeight', '$changed');");
@@ -1629,7 +1630,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                   widget.controller
                       .changeTextDirection(index == 0 ? 'ltr' : 'rtl');
                 } else {
-                  await widget.controller.editorController!
+                  await widget.controller
                       .evaluateJavascript(source: """
                   var s=document.getSelection();			
                   if(s==''){
@@ -1713,7 +1714,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                       if (kIsWeb) {
                         widget.controller.changeCase(changed);
                       } else {
-                        await widget.controller.editorController!
+                        await widget.controller
                             .evaluateJavascript(source: """
                           var selected = \$('#summernote-2').summernote('createRange');
                           if(selected.toString()){
@@ -1943,77 +1944,64 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  if (widget
-                                      .htmlToolbarOptions.allowImagePicking)
-                                    Text('Select from files',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  if (widget
-                                      .htmlToolbarOptions.allowImagePicking)
-                                    SizedBox(height: 10),
-                                  if (widget
-                                      .htmlToolbarOptions.allowImagePicking)
-                                    TextFormField(
-                                        controller: filename,
-                                        readOnly: true,
-                                        decoration: InputDecoration(
-                                          prefixIcon: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    Theme.of(context)
-                                                        .dialogBackgroundColor,
-                                                padding: EdgeInsets.only(
-                                                    left: 5, right: 5),
-                                                elevation: 0.0),
-                                            onPressed: () async {
-                                              result = await FilePicker.platform
-                                                  .pickFiles(
-                                                type: FileType.image,
-                                                withData: true,
-                                                allowedExtensions: widget
-                                                    .htmlToolbarOptions
-                                                    .imageExtensions,
-                                              );
-                                              if (result?.files.single.name !=
-                                                  null) {
-                                                setState(() {
-                                                  filename.text =
-                                                      result!.files.single.name;
-                                                });
-                                              }
-                                            },
-                                            child: Text('Choose image',
-                                                style: TextStyle(
-                                                    color: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyText1
-                                                        ?.color)),
-                                          ),
-                                          suffixIcon: result != null
-                                              ? IconButton(
-                                                  icon: Icon(Icons.close),
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      result = null;
-                                                      filename.text = '';
-                                                    });
-                                                  })
-                                              : Container(height: 0, width: 0),
-                                          errorText: validateFailed,
-                                          errorMaxLines: 2,
-                                          border: InputBorder.none,
-                                        )),
-                                  if (widget
-                                      .htmlToolbarOptions.allowImagePicking)
-                                    SizedBox(height: 20),
-                                  if (widget
-                                      .htmlToolbarOptions.allowImagePicking)
-                                    Text('URL',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  if (widget
-                                      .htmlToolbarOptions.allowImagePicking)
-                                    SizedBox(height: 10),
+                                  Text('Select from files',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  SizedBox(height: 10),
+                                  TextFormField(
+                                      controller: filename,
+                                      readOnly: true,
+                                      decoration: InputDecoration(
+                                        prefixIcon: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: Theme.of(context)
+                                                  .dialogBackgroundColor,
+                                              padding: EdgeInsets.only(
+                                                  left: 5, right: 5),
+                                              elevation: 0.0),
+                                          onPressed: () async {
+                                            result = await FilePicker.platform
+                                                .pickFiles(
+                                              type: FileType.image,
+                                              withData: true,
+                                              allowedExtensions: widget
+                                                  .htmlToolbarOptions
+                                                  .imageExtensions,
+                                            );
+                                            if (result?.files.single.name !=
+                                                null) {
+                                              setState(() {
+                                                filename.text =
+                                                    result!.files.single.name;
+                                              });
+                                            }
+                                          },
+                                          child: Text('Choose image',
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1
+                                                      ?.color)),
+                                        ),
+                                        suffixIcon: result != null
+                                            ? IconButton(
+                                                icon: Icon(Icons.close),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    result = null;
+                                                    filename.text = '';
+                                                  });
+                                                })
+                                            : Container(height: 0, width: 0),
+                                        errorText: validateFailed,
+                                        errorMaxLines: 2,
+                                        border: InputBorder.none,
+                                      )),
+                                  SizedBox(height: 20),
+                                  Text('URL',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  SizedBox(height: 10),
                                   TextField(
                                     controller: url,
                                     focusNode: urlFocus,
@@ -2038,10 +2026,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                   if (filename.text.isEmpty &&
                                       url.text.isEmpty) {
                                     setState(() {
-                                      validateFailed = widget.htmlToolbarOptions
-                                              .allowImagePicking
-                                          ? 'Please either choose an image or enter an image URL!'
-                                          : 'Please enter an image URL!';
+                                      validateFailed =
+                                          'Please either choose an image or enter an image URL!';
                                     });
                                   } else if (filename.text.isNotEmpty &&
                                       url.text.isNotEmpty) {
@@ -2576,7 +2562,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     widget.controller.insertTable(
                                         '${currentRows}x$currentCols');
                                   } else {
-                                    await widget.controller.editorController!
+                                    await widget.controller
                                         .evaluateJavascript(
                                             source:
                                                 "\$('#summernote-2').summernote('insertTable', '${currentRows}x$currentCols');");

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -254,11 +255,13 @@ class _DropdownMenuItemButtonState<T>
         widget.constraints.maxHeight,
         widget.itemIndex,
       );
-      widget.route.scrollController!.animateTo(
-        menuLimits.scrollOffset,
-        curve: Curves.easeInOut,
-        duration: const Duration(milliseconds: 100),
-      );
+      if (widget.route.scrollController!.hasClients){
+        widget.route.scrollController!.animateTo(
+          menuLimits.scrollOffset,
+          curve: Curves.easeInOut,
+          duration: const Duration(milliseconds: 100),
+        );
+      }
     }
   }
 
@@ -371,6 +374,11 @@ class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
         ),
     ];
 
+    var isDesktop = false;
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      isDesktop = true;
+    }
+
     return FadeTransition(
       opacity: _fadeOpacity,
       child: CustomPaint(
@@ -400,6 +408,7 @@ class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
                 child: Scrollbar(
                   thumbVisibility: true,
                   child: ListView(
+                    primary: isDesktop,
                     padding: kMaterialListPadding,
                     shrinkWrap: true,
                     children: children,

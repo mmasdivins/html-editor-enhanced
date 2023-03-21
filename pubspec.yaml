@@ -13,6 +13,8 @@ dependencies:
     sdk: flutter
   # webview plugin
   flutter_inappwebview: ^5.7.2+3
+  # windows webview plugin
+  webview_windows: ^0.2.2
   # plugin to get webview's visible fraction for keyboard height adjustment
   visibility_detector: ^0.3.3
   # plugin to get when the keyboard is hidden via back (Android)
@@ -44,6 +46,7 @@ dev_dependencies:
 flutter:
 
   assets:
+    - packages/html_editor_enhanced/assets/nn.html
     - packages/html_editor_enhanced/assets/summernote.html
     - packages/html_editor_enhanced/assets/summernote-no-plugins.html
     - packages/html_editor_enhanced/assets/summernote-lite.min.css
