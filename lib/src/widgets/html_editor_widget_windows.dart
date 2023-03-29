@@ -75,7 +75,6 @@ class _HtmlEditorWidgetWindowsState extends State<HtmlEditorWidget> {
   void initState() {
     widget.controller.editorController = _controller;
 
-
     createdViewId = getRandString(10);
     widget.controller.viewId = createdViewId;
 
@@ -442,6 +441,7 @@ class _HtmlEditorWidgetWindowsState extends State<HtmlEditorWidget> {
   @override
   void dispose() {
     visibleStream.close();
+    _controller.dispose();
     super.dispose();
   }
 

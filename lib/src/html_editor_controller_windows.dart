@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
@@ -12,6 +14,12 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
   });
+
+  StreamController _listener = StreamController();
+
+  @override
+  StreamController? get listener => _listener;
+
 
   /// Toolbar widget state to call various methods. For internal use only.
   @override
@@ -52,8 +60,11 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// is complete
   @override
   // ignore: unnecessary_getters_setters
-  set editorController(dynamic controller) =>
-      _editorController = controller as WebviewController?;
+  set editorController(dynamic controller) {
+    _editorController = controller as WebviewController?;
+    listener!.add("loaded");
+  }
+
 
   /// A function to quickly call a document.execCommand function in a readable format
   @override
@@ -174,13 +185,32 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Insert a link at the position of the cursor in the editor
   @override
   void insertLink(String text, String url, bool isNewWindow) {
-    _evaluateJavascript(source: """
-    \$('#summernote-2').summernote('createLink', {
-        text: "$text",
-        url: '$url',
-        isNewWindow: $isNewWindow
-      });
-    """);
+
+    // insertHtml("""
+    //   <a href="$url" onclick="(function(){
+    //     window.chrome.webview.postMessage('[link]$url');
+    //     return false;
+    //   })();return false;">$text</a>
+    // """);
+
+    // Copy
+    // _evaluateJavascript(source: """
+    // //   window.chrome.webview.postMessage(\$('#summernote-2').summernote('createRange')?.toString());
+    //   document.execCommand('copy', false);
+    // """);
+
+    // Cut
+    // _evaluateJavascript(source: """
+    //   document.execCommand('cut', false);
+    // """);
+
+    // _evaluateJavascript(source: """
+    // \$('#summernote-2').summernote('createLink', {
+    //     text: "$text",
+    //     url: '$url',
+    //     isNewWindow: $isNewWindow
+    //   });
+    // """);
   }
 
   /// Clears the focus from the webview by hiding the keyboard, calling the
@@ -216,6 +246,10 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
         source:
             "var height = document.body.scrollHeight; window.flutter_inappwebview.callHandler('setHeight', height);");
   }
+
+  @override
+  Stream<dynamic>? get webMessage => editorController?.webMessage;
+
 
   /// Add a notification to the bottom of the editor. This is styled similar to
   /// Bootstrap alerts. You can set the HTML to be displayed in the alert,

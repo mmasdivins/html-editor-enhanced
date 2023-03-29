@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:meta/meta.dart';
 
@@ -152,6 +154,11 @@ class HtmlEditorController {
   /// Undoes the last action
   void undo() {}
 
+
+  Stream<dynamic>? get webMessage => null;
+
+  StreamController? get listener => null;
+
   /// Internal function to change list style on Web
   @internal
   void changeListStyle(String changed) {}
@@ -171,4 +178,5 @@ class HtmlEditorController {
   /// Internal function to insert table on Web
   @internal
   void insertTable(String dimensions) {}
+
 }

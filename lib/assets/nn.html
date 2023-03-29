@@ -14,6 +14,8 @@
 <body>
 <div id="summernote-2"></div>
 <!--headString-->
+      <script src="plugins/summernote-text-findnreplace/summernote-text-findnreplace.js"></script>
+
       <script type="text/javascript">
         $(document).ready(function () {
           $('#summernote-2').summernote({
@@ -23,7 +25,6 @@
             disableGrammar: false,
             spellCheck: false,
             maximumFileSize: 10485760,
-            
             callbacks: {
         onKeydown: function(e) {
             var chars = $(".note-editable").text();
