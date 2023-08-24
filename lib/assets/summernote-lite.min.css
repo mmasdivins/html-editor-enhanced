@@ -866,6 +866,7 @@ a.note-dropdown-item,a.note-dropdown-item:hover {
 
 .note-editor {
   position: relative;
+  height: 100vh;
 }
 
 .note-editor .note-dropzone {

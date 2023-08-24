@@ -547,14 +547,15 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
           : widget.otherOptions.height,
       child: Column(
         children: <Widget>[
-          widget.htmlToolbarOptions.toolbarPosition ==
-                  ToolbarPosition.aboveEditor
-              ? ToolbarWidget(
-                  key: toolbarKey,
-                  controller: widget.controller,
-                  htmlToolbarOptions: widget.htmlToolbarOptions,
-                  callbacks: widget.callbacks)
-              : Container(height: 0, width: 0),
+          // widget.htmlToolbarOptions.toolbarPosition ==
+          //         ToolbarPosition.aboveEditor
+          //     ? ToolbarWidget(
+          //         key: toolbarKey,
+          //         controller: widget.controller,
+          //         htmlToolbarOptions: widget.htmlToolbarOptions,
+          //         callbacks: widget.callbacks)
+          //     :
+          Container(height: 0, width: 0),
           Expanded(
               child: Directionality(
                   textDirection: TextDirection.ltr,
@@ -572,14 +573,15 @@ class _HtmlEditorWidgetWebState extends State<HtmlEditorWidget> {
                                   : widget.otherOptions.height);
                         }
                       }))),
-          widget.htmlToolbarOptions.toolbarPosition ==
-                  ToolbarPosition.belowEditor
-              ? ToolbarWidget(
-                  key: toolbarKey,
-                  controller: widget.controller,
-                  htmlToolbarOptions: widget.htmlToolbarOptions,
-                  callbacks: widget.callbacks)
-              : Container(height: 0, width: 0),
+          // widget.htmlToolbarOptions.toolbarPosition ==
+          //         ToolbarPosition.belowEditor
+          //     ? ToolbarWidget(
+          //         key: toolbarKey,
+          //         controller: widget.controller,
+          //         htmlToolbarOptions: widget.htmlToolbarOptions,
+          //         callbacks: widget.callbacks)
+          //     :
+          Container(height: 0, width: 0),
         ],
       ),
     );

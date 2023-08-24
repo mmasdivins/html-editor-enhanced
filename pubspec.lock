@@ -312,10 +312,11 @@ packages:
   webview_windows:
     dependency: "direct main"
     description:
-      name: webview_windows
-      sha256: a6d76f9f020e638c2e5417f473e2907c097d1fe3eac8bd4be7517bc3a0df6b86
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "5d70b39cb2f7d9ab226b4716910bc9f65836830c"
+      url: "https://github.com/mmasdivins/flutter-webview-windows.git"
+    source: git
     version: "0.2.2"
   win32:
     dependency: transitive

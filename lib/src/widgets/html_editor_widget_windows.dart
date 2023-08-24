@@ -406,8 +406,13 @@ class _HtmlEditorWidgetWindowsState extends State<HtmlEditorWidget> {
 
     _controller.loadingState.listen((event) {
       if (event == LoadingState.navigationCompleted){
-        if (widget.htmlEditorOptions.initialText != null && widget.htmlEditorOptions.initialText != "")
-        widget.controller.setText(widget.htmlEditorOptions.initialText!);
+        if (widget.htmlEditorOptions.disabled && !callbacksInitialized) {
+          widget.controller.disable();
+        }
+
+        if (widget.htmlEditorOptions.initialText != null && widget.htmlEditorOptions.initialText != ""){
+          widget.controller.setText(widget.htmlEditorOptions.initialText!);
+        }
       }
     });
 

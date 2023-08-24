@@ -120,14 +120,18 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
           decoration: widget.otherOptions.decoration,
           child: Column(
             children: [
-              widget.htmlToolbarOptions.toolbarPosition ==
-                      ToolbarPosition.aboveEditor
-                  ? ToolbarWidget(
-                      key: toolbarKey,
-                      controller: widget.controller,
-                      htmlToolbarOptions: widget.htmlToolbarOptions,
-                      callbacks: widget.callbacks)
-                  : Container(height: 0, width: 0),
+              // widget.htmlToolbarOptions.toolbarPosition ==
+              //         ToolbarPosition.aboveEditor
+              //     ?
+                  // TODO: canviar si no fem servir windows
+              // ToolbarWidget(
+              //         key: toolbarKey,
+              //         controller: widget.controller,
+              //         htmlToolbarOptions: widget.htmlToolbarOptions,
+              //         callbacks: widget.callbacks)
+
+                  // :
+              Container(height: 0, width: 0),
               Expanded(
                 child: InAppWebView(
                   initialFile: filePath,
@@ -542,14 +546,16 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                   },
                 ),
               ),
-              widget.htmlToolbarOptions.toolbarPosition ==
-                      ToolbarPosition.belowEditor
-                  ? ToolbarWidget(
-                      key: toolbarKey,
-                      controller: widget.controller,
-                      htmlToolbarOptions: widget.htmlToolbarOptions,
-                      callbacks: widget.callbacks)
-                  : Container(height: 0, width: 0),
+              // TODO: canviar si no fem servir windows
+              // widget.htmlToolbarOptions.toolbarPosition ==
+              //         ToolbarPosition.belowEditor
+              //     ? ToolbarWidget(
+              //         key: toolbarKey,
+              //         controller: widget.controller,
+              //         htmlToolbarOptions: widget.htmlToolbarOptions,
+              //         callbacks: widget.callbacks)
+              //     :
+              Container(height: 0, width: 0),
             ],
           ),
         ),

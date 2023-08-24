@@ -21,9 +21,11 @@
           $('#summernote-2').summernote({
             placeholder: "",
             tabsize: 2,
-            height: 550.0,
+            //height: 550.0,
             disableGrammar: false,
             spellCheck: false,
+            disableResizeEditor: true,
+            disableDragAndDrop:true,
             maximumFileSize: 10485760,
             callbacks: {
         onKeydown: function(e) {
@@ -35,7 +37,9 @@
       },
     
           });
-          
+
+          $('.note-statusbar').hide();
+
           $('#summernote-2').on('summernote.change', function(_, contents, $editable) {
             window.parent.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onChangeContent", "contents": contents}), "*");
           });
