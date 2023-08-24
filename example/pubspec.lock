@@ -327,11 +327,9 @@ packages:
   webview_windows:
     dependency: transitive
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "5d70b39cb2f7d9ab226b4716910bc9f65836830c"
-      url: "https://github.com/mmasdivins/flutter-webview-windows.git"
-    source: git
+      path: "C:\\src\\flutter_webview_windows"
+      relative: false
+    source: path
     version: "0.2.2"
   win32:
     dependency: transitive

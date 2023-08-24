@@ -416,6 +416,10 @@ class _HtmlEditorWidgetWindowsState extends State<HtmlEditorWidget> {
       }
     });
 
+    // _controller.webMessage.listen((event) {
+    //   int br = 0;
+    // });
+
     // if (widget.htmlEditorOptions.initialText != null) {
     //   widget.controller.setText(widget.htmlEditorOptions.initialText!);
     // }

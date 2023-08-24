@@ -31,7 +31,6 @@
         onKeydown: function(e) {
             var chars = $(".note-editable").text();
             var totalChars = chars.length;
-            
             window.parent.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: characterCount", "totalChars": totalChars}), "*");
         }
       },
@@ -55,6 +54,8 @@
             if (data["view"].includes("LcftiKweyo5SPw==")) {
               if (data["type"].includes("getText")) {
                 var str = $('#summernote-2').summernote('code');
+                window.chrome.webview.postMessage(JSON.stringify({"type": "toDart: getText", "text": str}), "*");
+                console.log("getText(): ", str);
                 window.parent.postMessage(JSON.stringify({"type": "toDart: getText", "text": str}), "*");
               }
               if (data["type"].includes("getHeight")) {

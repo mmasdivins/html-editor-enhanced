@@ -16,8 +16,9 @@ dependencies:
   # windows webview plugin
 #  webview_windows: ^0.2.2
   webview_windows:
-    git:
-      url:  https://github.com/mmasdivins/flutter-webview-windows.git
+    path: C:\src\flutter_webview_windows
+#    git:
+#      url:  https://github.com/mmasdivins/flutter-webview-windows.git
   # plugin to get webview's visible fraction for keyboard height adjustment
   visibility_detector: ^0.3.3
   # plugin to get when the keyboard is hidden via back (Android)

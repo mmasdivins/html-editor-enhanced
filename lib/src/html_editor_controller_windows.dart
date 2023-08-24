@@ -77,8 +77,27 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Gets the text from the editor and returns it as a [String].
   @override
   Future<String> getText() async {
-    var text = await _evaluateJavascript(
-        source: "\$('#summernote-2').summernote('code');") as String?;
+    bool mutex = false;
+    var text;
+
+    var stre = _editorController?.webMessage.asBroadcastStream();
+    stre?.listen((event) {
+      text = event;
+      mutex = true;
+    });
+
+    await _evaluateJavascript(
+        source: "window.chrome.webview.postMessage(\$('#summernote-2').summernote('code'));") as String?;
+
+    Future.delayed(
+      const Duration(milliseconds: 500),
+      () {
+        mutex = true;
+      }
+    );
+
+    while(!mutex);
+
     if (processOutputHtml &&
         (text == null ||
             text.isEmpty ||
