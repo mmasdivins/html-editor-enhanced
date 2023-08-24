@@ -406,7 +406,7 @@ class _HtmlEditorWidgetWindowsState extends State<HtmlEditorWidget> {
 
     _controller.loadingState.listen((event) {
       if (event == LoadingState.navigationCompleted){
-        if (widget.htmlEditorOptions.disabled && !callbacksInitialized) {
+        if (widget.htmlEditorOptions.disabled /*&& !callbacksInitialized*/) {
           widget.controller.disable();
         }
 
