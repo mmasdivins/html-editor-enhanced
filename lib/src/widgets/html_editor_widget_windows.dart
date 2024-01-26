@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:path/path.dart' as p;
@@ -404,8 +405,24 @@ class _HtmlEditorWidgetWindowsState extends State<HtmlEditorWidget> {
     // await _controller.loadStringContent(htmlString);
     await _controller.loadUrl(getAssetFileUrl("nn.html"));
 
+    _controller.webMessage.listen((event) {
+
+      if (event is String) {
+        Map<String, dynamic> jsonMap = json.decode(event);
+        if (jsonMap.containsKey('type')) {
+          var type = jsonMap['type'];
+          if (type.toString().contains('toDart: updateToolbar')) {
+            if (widget.controller.toolbar != null) {
+              widget.controller.toolbar!.updateToolbar(jsonMap);
+            }
+          }
+        }
+      }
+    });
+
     _controller.loadingState.listen((event) {
       if (event == LoadingState.navigationCompleted){
+
         if (widget.htmlEditorOptions.disabled /*&& !callbacksInitialized*/) {
           widget.controller.disable();
         }
@@ -945,6 +962,7 @@ class _HtmlEditorWidgetWindowsState extends State<HtmlEditorWidget> {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.before.command', function(_, contents, \$editable) {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onBeforeCommand", "contents": contents}));
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onBeforeCommand", "contents": contents}), "*");
           });\n
         """;
@@ -953,6 +971,7 @@ class _HtmlEditorWidgetWindowsState extends State<HtmlEditorWidget> {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.change.codeview', function(_, contents, \$editable) {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onChangeCodeview", "contents": contents}));
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onChangeCodeview", "contents": contents}), "*");
           });\n
         """;
@@ -961,6 +980,7 @@ class _HtmlEditorWidgetWindowsState extends State<HtmlEditorWidget> {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.dialog.shown', function() {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onDialogShown"}));
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onDialogShown"}), "*");
           });\n
         """;
@@ -969,6 +989,7 @@ class _HtmlEditorWidgetWindowsState extends State<HtmlEditorWidget> {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.enter', function() {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onEnter"}));
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onEnter"}), "*");
           });\n
         """;
@@ -977,6 +998,7 @@ class _HtmlEditorWidgetWindowsState extends State<HtmlEditorWidget> {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.focus', function() {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onFocus"}));
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onFocus"}), "*");
           });\n
         """;
@@ -985,6 +1007,7 @@ class _HtmlEditorWidgetWindowsState extends State<HtmlEditorWidget> {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.blur', function() {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onBlur"}));
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onBlur"}), "*");
           });\n
         """;
@@ -993,6 +1016,7 @@ class _HtmlEditorWidgetWindowsState extends State<HtmlEditorWidget> {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.blur.codeview', function() {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onBlurCodeview"}));
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onBlurCodeview"}), "*");
           });\n
         """;
@@ -1001,6 +1025,7 @@ class _HtmlEditorWidgetWindowsState extends State<HtmlEditorWidget> {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.keydown', function(_, e) {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onKeyDown", "keyCode": e.keyCode}));
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onKeyDown", "keyCode": e.keyCode}), "*");
           });\n
         """;
@@ -1009,6 +1034,7 @@ class _HtmlEditorWidgetWindowsState extends State<HtmlEditorWidget> {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.keyup', function(_, e) {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onKeyUp", "keyCode": e.keyCode}));
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onKeyUp", "keyCode": e.keyCode}), "*");
           });\n
         """;
@@ -1017,6 +1043,7 @@ class _HtmlEditorWidgetWindowsState extends State<HtmlEditorWidget> {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.mousedown', function(_) {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onMouseDown"}));
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onMouseDown"}), "*");
           });\n
         """;
@@ -1025,6 +1052,7 @@ class _HtmlEditorWidgetWindowsState extends State<HtmlEditorWidget> {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.mouseup', function(_) {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onMouseUp"}));
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onMouseUp"}), "*");
           });\n
         """;
@@ -1033,6 +1061,7 @@ class _HtmlEditorWidgetWindowsState extends State<HtmlEditorWidget> {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.paste', function(_) {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onPaste"}));
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onPaste"}), "*");
           });\n
         """;
@@ -1041,6 +1070,7 @@ class _HtmlEditorWidgetWindowsState extends State<HtmlEditorWidget> {
       callbacks = callbacks +
           """
           \$('#summernote-2').on('summernote.scroll', function(_) {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onScroll"}));
             window.parent.postMessage(JSON.stringify({"view": "$createdViewId", "type": "toDart: onScroll"}), "*");
           });\n
         """;

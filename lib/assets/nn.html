@@ -31,6 +31,7 @@
         onKeydown: function(e) {
             var chars = $(".note-editable").text();
             var totalChars = chars.length;
+            window.chrome.webview.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: characterCount", "totalChars": totalChars}));
             window.parent.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: characterCount", "totalChars": totalChars}), "*");
         }
       },
@@ -40,6 +41,7 @@
           $('.note-statusbar').hide();
 
           $('#summernote-2').on('summernote.change', function(_, contents, $editable) {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onChangeContent", "contents": contents}));
             window.parent.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onChangeContent", "contents": contents}), "*");
           });
         });
@@ -54,12 +56,13 @@
             if (data["view"].includes("LcftiKweyo5SPw==")) {
               if (data["type"].includes("getText")) {
                 var str = $('#summernote-2').summernote('code');
-                window.chrome.webview.postMessage(JSON.stringify({"type": "toDart: getText", "text": str}), "*");
+                window.chrome.webview.postMessage(JSON.stringify({"type": "toDart: getText", "text": str}));
                 console.log("getText(): ", str);
                 window.parent.postMessage(JSON.stringify({"type": "toDart: getText", "text": str}), "*");
               }
               if (data["type"].includes("getHeight")) {
                 var height = document.body.scrollHeight;
+                window.chrome.webview.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: htmlHeight", "height": height}));
                 window.parent.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: htmlHeight", "height": height}), "*");
               }
               if (data["type"].includes("setInputType")) {
@@ -192,9 +195,11 @@
                   
                 span.appendChild(content);
                 var htmlContent = span.innerHTML;
-                
+
+                window.chrome.webview.postMessage(JSON.stringify({"type": "toDart: getSelectedText", "text": htmlContent}));
                 window.parent.postMessage(JSON.stringify({"type": "toDart: getSelectedText", "text": htmlContent}), "*");
               } else if (data["type"].includes("getSelectedText")) {
+                window.chrome.webview.postMessage(JSON.stringify({"type": "toDart: getSelectedText", "text": window.getSelection().toString()}));
                 window.parent.postMessage(JSON.stringify({"type": "toDart: getSelectedText", "text": window.getSelection().toString()}), "*");
               }
               
@@ -248,7 +253,7 @@
             fontName = document.queryCommandValue('fontName');
           }
           var message = {
-            'view': "LcftiKweyo5SPw==", 
+            'view': "LcftiKweyo5SPw==",
             'type': "toDart: updateToolbar",
             'style': parent,
             'fontName': fontName,
@@ -262,58 +267,72 @@
             'lineHeight': lineHeight,
             'direction': direction,
           };
+          window.chrome.webview.postMessage(JSON.stringify(message));
           window.parent.postMessage(JSON.stringify(message), "*");
         }
         
-                  $('#summernote-2').on('summernote.before.command', function(_, contents, $editable) {
+          $('#summernote-2').on('summernote.before.command', function(_, contents, $editable) {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onBeforeCommand", "contents": contents}));
             window.parent.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onBeforeCommand", "contents": contents}), "*");
           });
 
-                  $('#summernote-2').on('summernote.change.codeview', function(_, contents, $editable) {
+          $('#summernote-2').on('summernote.change.codeview', function(_, contents, $editable) {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onChangeCodeview", "contents": contents}));
             window.parent.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onChangeCodeview", "contents": contents}), "*");
           });
 
-                  $('#summernote-2').on('summernote.dialog.shown', function() {
+          $('#summernote-2').on('summernote.dialog.shown', function() {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onDialogShown"}));
             window.parent.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onDialogShown"}), "*");
           });
 
-                  $('#summernote-2').on('summernote.enter', function() {
+          $('#summernote-2').on('summernote.enter', function() {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onEnter"}));
             window.parent.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onEnter"}), "*");
           });
 
-                  $('#summernote-2').on('summernote.focus', function() {
+          $('#summernote-2').on('summernote.focus', function() {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onFocus"}));
             window.parent.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onFocus"}), "*");
           });
 
-                  $('#summernote-2').on('summernote.blur', function() {
+          $('#summernote-2').on('summernote.blur', function() {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onBlur"}));
             window.parent.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onBlur"}), "*");
           });
 
-                  $('#summernote-2').on('summernote.blur.codeview', function() {
+          $('#summernote-2').on('summernote.blur.codeview', function() {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onBlurCodeview"}));
             window.parent.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onBlurCodeview"}), "*");
           });
 
-                  $('#summernote-2').on('summernote.keydown', function(_, e) {
+          $('#summernote-2').on('summernote.keydown', function(_, e) {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onKeyDown", "keyCode": e.keyCode}));
             window.parent.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onKeyDown", "keyCode": e.keyCode}), "*");
           });
 
-                  $('#summernote-2').on('summernote.keyup', function(_, e) {
+          $('#summernote-2').on('summernote.keyup', function(_, e) {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onKeyUp", "keyCode": e.keyCode}));
             window.parent.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onKeyUp", "keyCode": e.keyCode}), "*");
           });
 
-                  $('#summernote-2').on('summernote.mousedown', function(_) {
+          $('#summernote-2').on('summernote.mousedown', function(_) {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onMouseDown"}));
             window.parent.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onMouseDown"}), "*");
           });
 
-                  $('#summernote-2').on('summernote.mouseup', function(_) {
+          $('#summernote-2').on('summernote.mouseup', function(_) {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onMouseUp"}));
             window.parent.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onMouseUp"}), "*");
           });
 
-                  $('#summernote-2').on('summernote.paste', function(_) {
+          $('#summernote-2').on('summernote.paste', function(_) {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onPaste"}));
             window.parent.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onPaste"}), "*");
           });
 
-                  $('#summernote-2').on('summernote.scroll', function(_) {
+          $('#summernote-2').on('summernote.scroll', function(_) {
+            window.chrome.webview.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onScroll"}));
             window.parent.postMessage(JSON.stringify({"view": "LcftiKweyo5SPw==", "type": "toDart: onScroll"}), "*");
           });
 

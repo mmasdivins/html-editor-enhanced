@@ -205,12 +205,12 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   void insertLink(String text, String url, bool isNewWindow) {
 
-    // insertHtml("""
-    //   <a href="$url" onclick="(function(){
-    //     window.chrome.webview.postMessage('[link]$url');
-    //     return false;
-    //   })();return false;">$text</a>
-    // """);
+    insertHtml("""
+      <a href="$url" onclick="(function(){
+        window.chrome.webview.postMessage('[link]$url');
+        return false;
+      })();return false;">$text</a>
+    """);
 
     // Copy
     // _evaluateJavascript(source: """
