@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -82,12 +83,19 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
     var stre = _editorController?.webMessage.asBroadcastStream();
     stre?.listen((event) {
-      text = event;
+      Map<String, dynamic> jsonMap = json.decode(event);
+      if (jsonMap.containsKey('type')) {
+        var type = jsonMap['type'];
+        if (type.toString().contains('toDart: text')) {
+          text = jsonMap['text'];
+        }
+      }
+      // text = event;
       mutex = true;
     });
 
     await _evaluateJavascript(
-        source: "window.chrome.webview.postMessage(\$('#summernote-2').summernote('code'));") as String?;
+        source: "window.chrome.webview.postMessage(JSON.stringify({\"type\": \"toDart: text\", \"text\": \$('#summernote-2').summernote('code')}));") as String?;
 
     Future.delayed(
       const Duration(milliseconds: 500),
